@@ -579,6 +579,12 @@
   <div class="home-hint">
     👥 من 3 إلى 12 لاعب · 👻 الأشباح يخفون أنفسهم بين الطاقم
   </div>
+  <div style="margin-top:28px; text-align:center;">
+    <div style="font-size:10px; color:var(--muted); letter-spacing:1px; margin-bottom:4px;">DEVELOPED BY</div>
+    <a href="mailto:ziz737@gmail.com" style="color:var(--accent2); font-size:13px; font-weight:600; text-decoration:none; border:1px solid rgba(6,182,212,0.25); padding:6px 16px; border-radius:20px; background:rgba(6,182,212,0.07); letter-spacing:0.5px;">
+      ✉️ ziz737@gmail.com
+    </a>
+  </div>
 </div>
 
 <!-- ══════════ LOBBY ══════════ -->
@@ -586,7 +592,7 @@
   <div class="lobby-header">
     <div class="room-code-display">
       <div class="room-code-label">كود الغرفة</div>
-      <div class="room-code-value" id="lobby-code">-----</div>
+      <div class="room-code-value" id="lobby-code">---</div>
     </div>
     <div class="share-hint">📲 شارك الكود مع أصدقائك</div>
   </div>
@@ -652,7 +658,7 @@
 <!-- ══════════ HOST VIEW ══════════ -->
 <div class="screen" id="host-view">
   <div class="host-header">
-    <div class="host-room-code" id="host-code">-----</div>
+    <div class="host-room-code" id="host-code">---</div>
     <div class="host-subtitle">لوحة تحكم المضيف</div>
   </div>
   <div class="host-stats">
@@ -745,9 +751,9 @@
     </div>
     <div class="input-group">
       <label>كود الغرفة</label>
-      <input type="text" id="join-code" placeholder="XXXXX" maxlength="5" class="code-input" autocomplete="off">
+      <input type="text" id="join-code" placeholder="XXX" maxlength="3" class="code-input" autocomplete="off" inputmode="numeric" pattern="[0-9]*">
     </div>
-    <button class="btn-primary" onclick="joinRoom()">انضم الآن 🎯</button>
+    <button class="btn-primary" id="join-btn" onclick="joinRoom()">انضم الآن 🎯</button>
     <button class="btn-secondary" onclick="closeModal('join-modal')">إلغاء</button>
   </div>
 </div>
@@ -869,7 +875,17 @@ function setupSocketEvents() {
     setTimeout(() => showResult(winner, results), 500);
   });
 
-  socket.on('error', ({ message }) => showToast('❌ ' + message, 'danger'));
+  socket.on('error', ({ message }) => {
+    showToast('❌ ' + message, 'danger');
+    // Re-enable join button if error occurs
+    const btn = document.getElementById('join-btn');
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = 'انضم الآن 🎯';
+      btn.style.opacity = '';
+      btn.style.cursor = '';
+    }
+  });
 }
 
 // ── Navigation ──────────────────────────────────────────────
@@ -892,9 +908,17 @@ function createRoom() {
 
 function joinRoom() {
   const name = document.getElementById('join-name').value.trim();
-  const code = document.getElementById('join-code').value.trim().toUpperCase();
+  const code = document.getElementById('join-code').value.trim();
   if (!name) return showToast('❗ أدخل اسمك', 'danger');
-  if (code.length !== 5) return showToast('❗ أدخل كوداً صحيحاً', 'danger');
+  if (code.length !== 3) return showToast('❗ أدخل كوداً من 3 أرقام', 'danger');
+
+  // Disable button to prevent duplicate joins
+  const btn = document.getElementById('join-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ جارٍ الانضمام...';
+  btn.style.opacity = '0.6';
+  btn.style.cursor = 'not-allowed';
+
   myName = name;
   connectSocket();
   socket.emit('joinRoom', { code, playerName: name });
@@ -1261,9 +1285,9 @@ function showToast(msg, type='info') {
   toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-// Join code auto uppercase
+// Join code numbers only
 document.getElementById('join-code').addEventListener('input', e => {
-  e.target.value = e.target.value.toUpperCase();
+  e.target.value = e.target.value.replace(/[^0-9]/g, '');
 });
 
 </script>
