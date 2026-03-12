@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const rooms = {};
 
 function generateCode() {
-  return Math.random().toString(36).substring(2, 7).toUpperCase();
+  return Math.floor(100 + Math.random() * 900).toString();
 }
 
 const TASKS = [
@@ -251,17 +251,17 @@ io.on('connection', (socket) => {
   });
 
   socket.on('joinRoom', ({ code, playerName }) => {
-    const room = rooms[code.toUpperCase()];
+    const room = rooms[code];
     if (!room) return socket.emit('error', { message: 'Room not found' });
     if (room.phase !== 'lobby') return socket.emit('error', { message: 'Game already started' });
     if (Object.keys(room.players).length >= 12) return socket.emit('error', { message: 'Room is full' });
 
     const colorIdx = Object.keys(room.players).length;
     room.players[socket.id] = { id: socket.id, name: playerName, role: null, alive: true, color: PLAYER_COLORS[colorIdx % PLAYER_COLORS.length], tasks: [], completedTasks: 0, location: 'Bridge' };
-    socket.join(code.toUpperCase());
-    socket.emit('joinedRoom', { code: code.toUpperCase() });
-    broadcastState(code.toUpperCase());
-    io.to(code.toUpperCase()).emit('playerJoined', { name: playerName });
+    socket.join(code);
+    socket.emit('joinedRoom', { code });
+    broadcastState(code);
+    io.to(code).emit('playerJoined', { name: playerName });
   });
 
   socket.on('startGame', ({ code }) => {
