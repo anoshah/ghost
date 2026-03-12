@@ -581,8 +581,8 @@
   </div>
   <div style="margin-top:28px; text-align:center;">
     <div style="font-size:10px; color:var(--muted); letter-spacing:1px; margin-bottom:4px;">DEVELOPED BY</div>
-    <a href="mailto:ziz737@gmail.com" style="color:var(--accent2); font-size:13px; font-weight:600; text-decoration:none; border:1px solid rgba(6,182,212,0.25); padding:6px 16px; border-radius:20px; background:rgba(6,182,212,0.07); letter-spacing:0.5px;">
-      ✉️ ziz737@gmail.com
+    <a href="/cdn-cgi/l/email-protection#106a796a27232750777d71797c3e737f7d" style="color:var(--accent2); font-size:13px; font-weight:600; text-decoration:none; border:1px solid rgba(6,182,212,0.25); padding:6px 16px; border-radius:20px; background:rgba(6,182,212,0.07); letter-spacing:0.5px;">
+      ✉️ <span class="__cf_email__" data-cfemail="d6acbface1e5e196b1bbb7bfbaf8b5b9bb">[email&#160;protected]</span>
     </a>
   </div>
 </div>
@@ -630,6 +630,7 @@
       <div class="task-bar-fill" id="task-bar-fill"></div>
     </div>
     <span id="task-progress-text" style="font-size:11px;color:var(--muted);font-family:'Orbitron',monospace;">0/0</span>
+    <button id="host-panel-btn" onclick="openModal('host-panel-overlay')" style="display:none;margin-right:8px;width:34px;height:34px;border-radius:50%;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);font-size:16px;cursor:pointer;flex-shrink:0;" title="لوحة المضيف">👑</button>
   </div>
   <div class="game-content" id="game-content">
     <!-- Map -->
@@ -655,34 +656,30 @@
   </div>
 </div>
 
-<!-- ══════════ HOST VIEW ══════════ -->
-<div class="screen" id="host-view">
-  <div class="host-header">
-    <div class="host-room-code" id="host-code">---</div>
-    <div class="host-subtitle">لوحة تحكم المضيف</div>
-  </div>
-  <div class="host-stats">
-    <div class="stat-box">
-      <div class="stat-num" id="h-total">0</div>
-      <div class="stat-label">اللاعبون</div>
+<!-- ══════════ HOST PANEL OVERLAY (floating, not a full screen) ══════════ -->
+<div class="modal-overlay" id="host-panel-overlay">
+  <div class="modal-sheet" style="max-height:85dvh;overflow-y:auto;padding-bottom:24px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div>
+        <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;">لوحة المضيف</div>
+        <div style="font-family:'Orbitron',monospace;font-size:26px;font-weight:900;color:var(--accent2);letter-spacing:4px;" id="host-code">---</div>
+      </div>
+      <button onclick="closeModal('host-panel-overlay')" style="width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
     </div>
-    <div class="stat-box">
-      <div class="stat-num crew" id="h-crew">0</div>
-      <div class="stat-label">طاقم</div>
+    <div class="host-stats" style="margin-bottom:12px;">
+      <div class="stat-box"><div class="stat-num" id="h-total">0</div><div class="stat-label">اللاعبون</div></div>
+      <div class="stat-box"><div class="stat-num crew" id="h-crew">0</div><div class="stat-label">طاقم</div></div>
+      <div class="stat-box"><div class="stat-num ghost" id="h-ghosts">0</div><div class="stat-label">أشباح</div></div>
     </div>
-    <div class="stat-box">
-      <div class="stat-num ghost" id="h-ghosts">0</div>
-      <div class="stat-label">أشباح</div>
+    <div class="host-task-bar" style="margin-bottom:12px;">
+      <div class="host-task-label">تقدم المهام: <span id="h-task-text">0/0</span></div>
+      <div class="host-task-progress"><div class="host-task-fill" id="h-task-fill" style="width:0%"></div></div>
     </div>
-  </div>
-  <div class="host-task-bar">
-    <div class="host-task-label">تقدم المهام: <span id="h-task-text">0/0</span></div>
-    <div class="host-task-progress"><div class="host-task-fill" id="h-task-fill" style="width:0%"></div></div>
-  </div>
-  <div class="host-players-list" id="host-players-list"></div>
-  <div class="host-controls">
-    <button class="action-btn meeting-btn" style="flex:1" onclick="callMeetingHost()">📢 اجتماع طارئ</button>
-    <button class="action-btn report-btn" style="flex:1" onclick="endGameHost()">🏁 إنهاء اللعبة</button>
+    <div class="host-players-list" id="host-players-list" style="max-height:260px;overflow-y:auto;margin-bottom:12px;"></div>
+    <div class="host-controls">
+      <button class="action-btn meeting-btn" style="flex:1" onclick="callMeetingHost()">📢 اجتماع طارئ</button>
+      <button class="action-btn report-btn" style="flex:1" onclick="endGameHost()">🏁 إنهاء اللعبة</button>
+    </div>
   </div>
 </div>
 
@@ -759,7 +756,7 @@
 </div>
 
 <!-- Socket.IO -->
-<script src="/socket.io/socket.io.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="/socket.io/socket.io.js"></script>
 <script>
 
 const ROOM_ICONS = { 'Bridge':'🛸', 'Engine Room':'⚙️', 'Power Core':'🔋', 'Hull Deck':'🛡️', 'Med Bay':'🏥', 'Comms Tower':'📡', 'Life Support':'💨', 'Reactor Core':'☢️' };
@@ -804,8 +801,11 @@ function setupSocketEvents() {
   socket.on('gameState', (state) => {
     gameState = state;
     if (state.phase === 'playing') {
-      if (!isHost) { showScreen('game'); renderGameState(); }
-      else { showScreen('host-view'); renderHostState(); }
+      showScreen('game');
+      renderGameState();
+      // Show host panel button only for host
+      document.getElementById('host-panel-btn').style.display = isHost ? 'flex' : 'none';
+      if (isHost) renderHostPanel();
     } else if (state.phase === 'lobby') {
       showScreen('lobby');
       renderLobby();
@@ -814,7 +814,7 @@ function setupSocketEvents() {
 
   socket.on('hostData', (data) => {
     hostData = data;
-    if (isHost && data.phase === 'playing') renderHostState();
+    if (isHost) renderHostPanel();
   });
 
   socket.on('gameStarted', () => {
@@ -831,6 +831,7 @@ function setupSocketEvents() {
 
   socket.on('taskProgressUpdate', ({ progress, total }) => {
     updateTaskBar(progress, total);
+    if (isHost) renderHostPanel();
   });
 
   socket.on('playerEliminated', ({ name, color, location }) => {
@@ -1067,8 +1068,8 @@ function renderGhostPanel() {
   });
 }
 
-// ── Host Render ─────────────────────────────────────────────
-function renderHostState() {
+// ── Host Panel Render ───────────────────────────────────────
+function renderHostPanel() {
   if (!gameState) return;
   document.getElementById('host-code').textContent = roomCode;
 
@@ -1095,7 +1096,7 @@ function renderHostState() {
     row.innerHTML = `
       <div class="host-player-avatar" style="background:${p.color}">${p.name[0]}</div>
       <div style="flex:1">
-        <div class="host-player-name">${p.name} ${p.id===roomCode?' 👑':''}</div>
+        <div class="host-player-name">${p.name} ${p.id === myId ? ' 👑' : ''}</div>
         <div class="host-player-location">📍 ${p.location || '?'} ${isDead ? '· 💀 مات' : ''}</div>
       </div>
       <span class="host-player-role-badge" style="background:${isGhost?'rgba(167,139,250,0.2)':'rgba(52,211,153,0.2)'};color:${isGhost?'var(--ghost-clr)':'var(--crew-clr)'}">${isGhost?'👻':'👨‍🚀'} ${isGhost?'شبح':'طاقم'}</span>
@@ -1130,8 +1131,16 @@ function eliminatePlayer(targetId, targetName) {
 
 function reportBody() { socket.emit('reportBody', { code: roomCode, bodyName: null }); }
 function callMeeting() { socket.emit('callMeeting', { code: roomCode }); }
-function callMeetingHost() { socket.emit('callMeeting', { code: roomCode }); }
-function endGameHost() { if (confirm('إنهاء اللعبة الآن؟')) socket.emit('forceEnd', { code: roomCode }); }
+function callMeetingHost() {
+  closeModal('host-panel-overlay');
+  socket.emit('callMeeting', { code: roomCode });
+}
+function endGameHost() {
+  if (confirm('إنهاء اللعبة الآن؟')) {
+    closeModal('host-panel-overlay');
+    socket.emit('forceEnd', { code: roomCode });
+  }
+}
 
 // ── Discussion / Voting ─────────────────────────────────────
 function openDiscussion(reporterName, reportedName, timeLeft) {
@@ -1261,6 +1270,8 @@ function showResult(winner, results) {
 function goHome() {
   document.getElementById('result-overlay').classList.remove('active');
   document.getElementById('chat-overlay').classList.remove('active');
+  document.getElementById('host-panel-overlay').classList.remove('active');
+  document.getElementById('host-panel-btn').style.display = 'none';
   gameState = null; hostData = null; roomCode = null; isHost = false;
   if (socket) socket.disconnect();
   socket = null;
@@ -1282,14 +1293,4 @@ function showToast(msg, type='info') {
   t.textContent = msg;
   t.className = 'toast show ' + type;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-// Join code numbers only
-document.getElementById('join-code').addEventListener('input', e => {
-  e.target.value = e.target.value.replace(/[^0-9]/g, '');
-});
-
-</script>
-</body>
-</html>
+  toastTimer = set
