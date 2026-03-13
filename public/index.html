@@ -756,7 +756,7 @@
 </div>
 
 <!-- Socket.IO -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="/socket.io/socket.io.js"></script>
+<script src="/socket.io/socket.io.js"></script>
 <script>
 
 const ROOM_ICONS = { 'Bridge':'🛸', 'Engine Room':'⚙️', 'Power Core':'🔋', 'Hull Deck':'🛡️', 'Med Bay':'🏥', 'Comms Tower':'📡', 'Life Support':'💨', 'Reactor Core':'☢️' };
@@ -1293,4 +1293,14 @@ function showToast(msg, type='info') {
   t.textContent = msg;
   t.className = 'toast show ' + type;
   clearTimeout(toastTimer);
-  toastTimer = set
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Join code numbers only
+document.getElementById('join-code').addEventListener('input', e => {
+  e.target.value = e.target.value.replace(/[^0-9]/g, '');
+});
+
+</script>
+</body>
+</html>
